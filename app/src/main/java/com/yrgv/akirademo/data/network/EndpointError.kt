@@ -5,8 +5,9 @@ import java.net.ConnectException
 import java.net.UnknownHostException
 
 /**
- * Defines localized error responses and their associated data.
- */
+ * Defines localized error responses and functions to transform them.
+ * This makes it easy to convert network level error codes to be handled and transformed to local errors.
+ * */
 sealed class EndpointError(open val message: String?) {
 
     data class UnhandledError(
@@ -66,7 +67,6 @@ fun getEndpointError(code:Int, message:String?) : EndpointError {
 /**
  * Return appropriate EndpointError based on Throwable
  * */
-//TODO: ADD TESTS FOR ME
 fun Throwable.toLocalError(responseCode: Int? = null): Either<EndpointError, Nothing> {
     val endpointError = when (this) {
         is ConnectException,

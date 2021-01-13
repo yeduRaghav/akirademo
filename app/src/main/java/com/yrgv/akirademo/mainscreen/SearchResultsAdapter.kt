@@ -21,15 +21,15 @@ class SearchResultsAdapter private constructor(
     context: Context,
     private val queryChangeListener: QueryChangeListener,
     @LayoutRes private val layout: Int,
-) : ArrayAdapter<SearchResultUiModel>(context, layout) {
+) : ArrayAdapter<PlaceUiModel>(context, layout) {
 
     constructor(context: Context, queryChangeListener: QueryChangeListener) : this(
         context,
         queryChangeListener,
         R.layout.layout_search_result
     )
-
-    fun showResults(newResults: List<SearchResultUiModel>) {
+    
+    fun update(newResults: List<PlaceUiModel>) {
         clear()
         addAll(newResults)
         notifyDataSetChanged()
@@ -39,15 +39,14 @@ class SearchResultsAdapter private constructor(
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         if (convertView != null) return convertView
 
-        val searchResult =
+        val place =
             getItem(position) ?: throw IllegalStateException("Check value for position $position")
 
         val listItem = LayoutInflater.from(parent.context).inflate(layout, parent, false)
 
         return listItem.apply {
-            findViewById<MaterialTextView>(R.id.search_result_title)?.text = searchResult.name
-            findViewById<MaterialTextView>(R.id.search_result_description)?.text =
-                searchResult.address
+            findViewById<MaterialTextView>(R.id.search_result_title)?.text = place.name
+            findViewById<MaterialTextView>(R.id.search_result_description)?.text = place.address
         }
     }
 

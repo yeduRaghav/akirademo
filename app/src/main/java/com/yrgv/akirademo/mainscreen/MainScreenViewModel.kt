@@ -8,28 +8,27 @@ import com.yrgv.akirademo.data.network.EndpointError
 import com.yrgv.akirademo.data.network.placesapi.endpoint.AutoCompleteEndpoint
 import com.yrgv.akirademo.data.network.placesapi.model.AutoCompleteResponse.Prediction
 import com.yrgv.akirademo.utils.Either
-import com.yrgv.akirademo.utils.model.toSearchResultUiModels
-import kotlinx.coroutines.Dispatchers
+import com.yrgv.akirademo.utils.model.toFilteredPlaceUiModels
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 private const val MIN_QUERY_LENGTH = 2
 class MainScreenViewModel(
     private val autoCompleteEndpoint: AutoCompleteEndpoint
 ) : ViewModel() {
 
-    private val searchResults = MutableLiveData<List<SearchResultUiModel>>()
+    private val autocompleteViewState = MutableLiveData<AutocompleteViewState>()
     private var searchJob: Job? = null
 
-    fun getSearchResults(): LiveData<List<SearchResultUiModel>> = searchResults
+    fun getAutocompleteViewState(): LiveData<AutocompleteViewState> = autocompleteViewState
 
-    fun onSearchResultClicked(result: SearchResultUiModel) {
+    fun onPlaceClicked(result: PlaceUiModel) {
         //todo:
     }
 
     fun onQueryChanged(query: String?) {
         searchJob?.cancel()
-        if(query== null || query.length < MIN_QUERY_LENGTH) {
+        if (query == null || query.length < MIN_QUERY_LENGTH) {
             return
         }
         if (!query.isNullOrBlank()) {
@@ -48,13 +47,30 @@ class MainScreenViewModel(
     }
 
     private suspend fun onApiSearchSuccess(predictionsFromApi: List<Prediction>) {
-        searchResults.postValue(predictionsFromApi.toSearchResultUiModels())
+        val placeUIModels = predictionsFromApi.toFilteredPlaceUiModels()
+        autocompleteViewState.postValue(AutocompleteViewState.Success(placeUIModels))
     }
 
-    private fun onApiSearchFailure(error:EndpointError) {
-        when(error) {
-            //todo: deal with me
+    private fun onApiSearchFailure(endpointError: EndpointError) {
+        val errorType = getSearchResultErrorType(endpointError)
+        autocompleteViewState.postValue(AutocompleteViewState.Error(errorType))
+    }
+
+    private fun getSearchResultErrorType(endpointError: EndpointError): AutocompleteViewState.Error.ErrorType {
+        return when (endpointError) {
+            is EndpointError.Unreachable -> AutocompleteViewState.Error.ErrorType.NETWORK_ISSUE
+            else -> AutocompleteViewState.Error.ErrorType.OTHER
         }
     }
-
 }
+
+/**
+ * Defines the state of the Autocomplete view
+ * */
+sealed class AutocompleteViewState {
+    data class Success(val places: List<PlaceUiModel>) : AutocompleteViewState()
+    data class Error(val type: ErrorType) : AutocompleteViewState() {
+        enum class ErrorType { NETWORK_ISSUE, OTHER }
+    }
+}
+

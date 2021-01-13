@@ -1,9 +1,9 @@
 package com.yrgv.akirademo.mainscreen
 
 /**
- * Defines the 'view' level search result
+ * Defines the Place Model for UI
  */
-data class SearchResultUiModel(
+data class PlaceUiModel(
     val id: String,
     val name: String,
     val address: String

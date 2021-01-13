@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main_screen_root_view"
     tools:context=".mainscreen.MainActivity">
 
     <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -18,6 +19,8 @@
         android:layout_marginTop="@dimen/margin_16"
         android:layout_marginBottom="@dimen/margin_16"
         android:imeOptions="actionNone"
+        android:maxLines="3"
+        android:ellipsize="end"
         app:layout_constraintEnd_toStartOf="@id/main_screen_clear_button"
         app:layout_goneMarginEnd="@dimen/margin_16" />
 

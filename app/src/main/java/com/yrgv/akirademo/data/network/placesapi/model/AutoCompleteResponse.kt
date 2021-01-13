@@ -21,3 +21,6 @@ data class AutoCompleteResponse(
     }
 
 }
+
+const val PREDICTION_TYPE_RESTAURANT = "restaurant"
+const val PREDICTION_TYPE_LIQUOR_STORE = "liquor_store"

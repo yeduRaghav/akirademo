@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Akira Demo</string>
     <string name="search_view_hint">Search here</string>
+    <string name="toast_no_matching_results">No places match your criteria</string>
+    <string name="toast_network_issue">Sorry! Please check your internet connection</string>
+    <string name="toast_generic_error_message">Oops! Something went wrong</string>
 </resources>

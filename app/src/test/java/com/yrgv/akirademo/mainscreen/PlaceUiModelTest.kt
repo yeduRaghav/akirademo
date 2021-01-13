@@ -7,15 +7,15 @@ import org.junit.Test
 /**
  * Tests SearchResultUiModelTest class
  */
-class SearchResultUiModelTest {
+class PlaceUiModelTest {
 
     @Test
     fun `toString returns name and address separated by comma followed by space`() {
         val name = "Lorem"
         val address = "olor sit amet, consectetur adipiscing elit."
 
-        val searchResultUiModel = SearchResultUiModel(id = "fakeId", name = name, address = address)
-        val generatedString = searchResultUiModel.toString()
+        val placeUiModel = PlaceUiModel(id = "fakeId", name = name, address = address)
+        val generatedString = placeUiModel.toString()
 
         assertFalse(generatedString == "$name ,$address")
         assertFalse(generatedString == "$name,$address")

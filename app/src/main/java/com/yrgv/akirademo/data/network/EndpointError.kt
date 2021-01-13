@@ -1,6 +1,7 @@
 package com.yrgv.akirademo.data.network
 
 import com.yrgv.akirademo.utils.Either
+import java.net.ConnectException
 import java.net.UnknownHostException
 
 /**
@@ -68,6 +69,7 @@ fun getEndpointError(code:Int, message:String?) : EndpointError {
 //TODO: ADD TESTS FOR ME
 fun Throwable.toLocalError(responseCode: Int? = null): Either<EndpointError, Nothing> {
     val endpointError = when (this) {
+        is ConnectException,
         is UnknownHostException -> EndpointError.Unreachable(message)
         else -> EndpointError.UnhandledError(responseCode, this, message)
     }

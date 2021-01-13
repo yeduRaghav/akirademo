@@ -30,7 +30,11 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -38,8 +42,6 @@ dependencies {
     //language
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.core:core-ktx:$ktxVersion"
-
-
 
     //ui
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
@@ -71,5 +73,10 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
     testImplementation "com.squareup.okhttp3:mockwebserver:$okhttpMockWebServer"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
+
+    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0'
+    testImplementation 'org.mockito:mockito-inline:2.13.0'
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.2"
+
 
 }

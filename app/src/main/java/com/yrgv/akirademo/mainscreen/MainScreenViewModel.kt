@@ -1,5 +1,6 @@
 package com.yrgv.akirademo.mainscreen
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,31 +13,40 @@ import com.yrgv.akirademo.utils.model.toFilteredPlaceUiModels
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
+/**
+ * THe ViewModel for main screen. This class defines the state of the view,
+ * which are exposed to the activity or fragments through live data observables.
+ * */
 private const val MIN_QUERY_LENGTH = 2
 class MainScreenViewModel(
     private val autoCompleteEndpoint: AutoCompleteEndpoint
 ) : ViewModel() {
 
     private val autocompleteViewState = MutableLiveData<AutocompleteViewState>()
-    private var searchJob: Job? = null
+
+    @VisibleForTesting
+    var searchJob: Job? = null
 
     fun getAutocompleteViewState(): LiveData<AutocompleteViewState> = autocompleteViewState
 
-    fun onPlaceClicked(result: PlaceUiModel) {
-        //todo:
+    fun onPlaceClicked(place: PlaceUiModel) {
+        //todo: launch detail screen with place.placeId
     }
 
     fun onQueryChanged(query: String?) {
         searchJob?.cancel()
-        if (query == null || query.length < MIN_QUERY_LENGTH) {
-            return
-        }
-        if (!query.isNullOrBlank()) {
-            performSearch(query)
-        }
+        if (!query.isAcceptableQuery()) return
+        performSearch(query!!) // !! is safe here due to isAcceptableQuery()
     }
 
-    private fun performSearch(query: String) {
+    @VisibleForTesting
+    fun String?.isAcceptableQuery(): Boolean {
+        if (this.isNullOrBlank()) return false
+        return length >= MIN_QUERY_LENGTH
+    }
+
+    @VisibleForTesting
+    fun performSearch(query: String) {
         searchJob = viewModelScope.launch {
             val apiResponse = autoCompleteEndpoint.apply { setData(query) }.execute()
             when (apiResponse) {
@@ -51,12 +61,14 @@ class MainScreenViewModel(
         autocompleteViewState.postValue(AutocompleteViewState.Success(placeUIModels))
     }
 
-    private fun onApiSearchFailure(endpointError: EndpointError) {
+    @VisibleForTesting
+    fun onApiSearchFailure(endpointError: EndpointError) {
         val errorType = getSearchResultErrorType(endpointError)
         autocompleteViewState.postValue(AutocompleteViewState.Error(errorType))
     }
 
-    private fun getSearchResultErrorType(endpointError: EndpointError): AutocompleteViewState.Error.ErrorType {
+    @VisibleForTesting
+    fun getSearchResultErrorType(endpointError: EndpointError): AutocompleteViewState.Error.ErrorType {
         return when (endpointError) {
             is EndpointError.Unreachable -> AutocompleteViewState.Error.ErrorType.NETWORK_ISSUE
             else -> AutocompleteViewState.Error.ErrorType.OTHER

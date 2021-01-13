@@ -35,14 +35,11 @@
 
     <View
         android:id="@+id/search_result_decorator"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/grey"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_result_description"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-
+        app:layout_constraintTop_toBottomOf="@+id/search_result_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

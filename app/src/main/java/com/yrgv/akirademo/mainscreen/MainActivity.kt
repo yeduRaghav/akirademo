@@ -83,7 +83,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun handleAutocompleteSuccessState(state: AutocompleteViewState.Success) {
         searchViewAdapter.update(state.places)
         if (state.places.isEmpty()) {

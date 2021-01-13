@@ -7,15 +7,35 @@
     android:layout_height="match_parent"
     tools:context=".mainscreen.MainActivity">
 
-    <AutoCompleteTextView
+    <com.google.android.material.textfield.MaterialAutoCompleteTextView
         android:id="@+id/main_screen_search_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:hint="@string/search_view_hint"
-        android:layout_margin="@dimen/margin_16"
-        android:imeOptions="actionNone"/>
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_16"
+        android:layout_marginBottom="@dimen/margin_16"
+        android:imeOptions="actionNone"
+        app:layout_constraintEnd_toStartOf="@id/main_screen_clear_button"
+        app:layout_goneMarginEnd="@dimen/margin_16" />
+
+    <ImageButton
+        android:id="@+id/main_screen_clear_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:paddingStart="@dimen/margin_8"
+        android:paddingTop="@dimen/margin_16"
+        android:paddingEnd="@dimen/margin_8"
+        android:paddingBottom="@dimen/margin_16"
+        android:src="@drawable/ic_round_close_24"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/main_screen_search_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/main_screen_search_view"
+        app:layout_constraintTop_toTopOf="@+id/main_screen_search_view"
+        tools:ignore="ContentDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

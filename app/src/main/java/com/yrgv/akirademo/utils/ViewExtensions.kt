@@ -1,10 +1,6 @@
 package com.yrgv.akirademo.utils
 
 import android.view.View
-import android.widget.AutoCompleteTextView
-import android.widget.TextView
-import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doAfterTextChanged
 
 /**
  * Convenient Extension functions for the View classes
@@ -15,6 +11,10 @@ fun View.hide() {
     visibility = View.GONE
 }
 
+fun View.invisible() {
+    visibility = View.INVISIBLE
+}
+
 fun View.show() {
     visibility = View.VISIBLE
 }
@@ -23,10 +23,15 @@ fun View.show() {
 /**
  * Click listener for Views with debounce.
  * */
+
 fun View.setThrottledClickListener(delayInMillis: Long = 500L, runWhenClicked: SimpleCallback) {
     setOnClickListener {
         this.isClickable = false
-        this.postDelayed({ this.isClickable = true }, delayInMillis)
+        this.isEnabled = false
+        this.postDelayed({
+            this.isEnabled = true
+            this.isClickable = true
+        }, delayInMillis)
         runWhenClicked()
     }
 }

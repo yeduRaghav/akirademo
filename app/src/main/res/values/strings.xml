@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Akira Demo</string>
+    <string name="search_view_hint">Search here</string>
+</resources>

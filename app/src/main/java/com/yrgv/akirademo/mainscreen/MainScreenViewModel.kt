@@ -26,6 +26,7 @@ class MainScreenViewModel(
 
     @VisibleForTesting
     var searchJob: Job? = null
+    var query: String? = null
 
     fun getAutocompleteViewState(): LiveData<AutocompleteViewState> = autocompleteViewState
 
@@ -33,16 +34,16 @@ class MainScreenViewModel(
         //todo: launch detail screen with place.placeId
     }
 
-    fun onQueryChanged(query: String?) {
+    fun onQueryChanged(newQuery: String?) {
         searchJob?.cancel()
-        if (!query.isAcceptableQuery()) return
-        performSearch(query!!) // !! is safe here due to isAcceptableQuery()
+        if (!newQuery.isAcceptableQuery()) return
+        query = newQuery
+        performSearch(newQuery!!) // !! is safe here due to isAcceptableQuery()
     }
 
     @VisibleForTesting
     fun String?.isAcceptableQuery(): Boolean {
-        if (this.isNullOrBlank()) return false
-        return length >= MIN_QUERY_LENGTH
+        return ((!this.isNullOrBlank()) && this.length >= MIN_QUERY_LENGTH && this != query)
     }
 
     @VisibleForTesting

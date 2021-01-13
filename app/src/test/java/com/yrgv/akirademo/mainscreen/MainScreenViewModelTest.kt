@@ -56,6 +56,16 @@ class MainScreenViewModelTest {
     }
 
     @Test
+    fun `isAcceptableQuery returns false if same as current query in viewModel`() {
+        val viewModel = getSpiedViewModel()
+        with(viewModel) {
+            query = "value1"
+            assertFalse("value1".isAcceptableQuery())
+            assertTrue("value2".isAcceptableQuery())
+        }
+    }
+
+    @Test
     fun `onQueryChanged(null) must attempt to cancel existing searchJob`() {
         val viewModel = getSpiedViewModel()
         viewModel.searchJob = GlobalScope.launch { delay(1000L) }

@@ -1,5 +1,6 @@
 package com.yrgv.akirademo.utils.model
 
+import androidx.annotation.VisibleForTesting
 import com.yrgv.akirademo.data.network.placesapi.model.AutoCompleteResponse.Prediction
 import com.yrgv.akirademo.data.network.placesapi.model.PREDICTION_TYPE_LIQUOR_STORE
 import com.yrgv.akirademo.data.network.placesapi.model.PREDICTION_TYPE_RESTAURANT
@@ -11,7 +12,8 @@ import kotlinx.coroutines.withContext
  * Holds extension function to help with AutoSuggestion models
  */
 
-private fun Prediction.toPlaceUiModel(): PlaceUiModel {
+@VisibleForTesting
+fun Prediction.toPlaceUiModel(): PlaceUiModel {
     return PlaceUiModel(
         id = place_id,
         name = structured_formatting.main_text,
@@ -19,7 +21,8 @@ private fun Prediction.toPlaceUiModel(): PlaceUiModel {
     )
 }
 
-private suspend fun List<Prediction>.filterByRestaurantAndLiquorStore(): List<Prediction> {
+@VisibleForTesting
+suspend fun List<Prediction>.filterByRestaurantAndLiquorStore(): List<Prediction> {
     return withContext(Dispatchers.Default) {
         filter { prediction ->
             prediction.types.contains(PREDICTION_TYPE_RESTAURANT) or

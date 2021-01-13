@@ -28,7 +28,19 @@ class SearchResultsAdapter private constructor(
         queryChangeListener,
         R.layout.layout_search_result
     )
-    
+
+    private val emptyFilter = object:Filter() {
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            return FilterResults()
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            queryChangeListener(constraint?.toString())
+        }
+    }
+
+
+
     fun update(newResults: List<PlaceUiModel>) {
         clear()
         addAll(newResults)
@@ -52,15 +64,7 @@ class SearchResultsAdapter private constructor(
 
 
     override fun getFilter(): Filter {
-        return object:Filter() {
-            override fun performFiltering(constraint: CharSequence?): FilterResults {
-                return FilterResults()
-            }
-
-            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                queryChangeListener(constraint?.toString())
-            }
-        }
+        return emptyFilter
     }
 
 }
